@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon"
+    "server": "node --require dotenv/config server.js"
   },
   "dependencies": {
     "@line/bot-sdk": "^7.2.0",
@@ -20,7 +20,6 @@
     "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
-    "dotenv": "^8.2.0",
-    "nodemon": "^2.0.7"
+    "dotenv": "^8.2.0"
   }
 }
