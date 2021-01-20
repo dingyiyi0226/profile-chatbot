@@ -1,0 +1,8 @@
+{
+  "name": "profile-chatbot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:dingyiyi0226/profile-chatbot.git",
+  "author": "Huan-Ting,Chen <dingyiyi0226@gmail.com>",
+  "license": "MIT"
+}
