@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import line from '@line/bot-sdk';
-import ngrok from 'ngrok'
+// import ngrok from 'ngrok'
 
 let baseURL = process.env.BASE_URL;
 const config = {
@@ -28,15 +28,6 @@ app.post('/webhook', (req, res) => {
 
 const supportedCommands = ['Education', 'Side projects', 'Skills', 'Interests']
 
-// simple reply function
-const replyText = (token, texts) => {
-  texts = Array.isArray(texts) ? texts : [texts];
-  return client.replyMessage(
-    token,
-    texts.map((text) => ({ type: 'text', text }))
-  );
-};
-
 function handleEvent(event) {
   switch (event.type) {
     case 'message':
@@ -53,13 +44,6 @@ function handleEvent(event) {
 
     case 'leave':
       return console.log(`Left: ${JSON.stringify(event)}`);
-
-    case 'postback':
-      let data = event.postback.data;
-      if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
-        data += `(${JSON.stringify(event.postback.params)})`;
-      }
-      return replyText(event.replyToken, `Got postback: ${data}`);
 
     default:
       return console.log(`not handle event: ${JSON.stringify(event)}`);
@@ -107,7 +91,7 @@ function handleFollow(replyToken, source) {
         ]
       ));
   } else {
-    return replyText(replyToken, 'Bot can\'t use profile API without user ID');
+    return console.log('Bot can\'t use profile API without user ID');
   }
 }
 
@@ -240,8 +224,7 @@ function handleText(message, replyToken, source) {
         )
 
     default:
-      console.log(`Receive message: ${message.text}`);
-      return;
+      return console.log(`Receive message: ${message.text}`);
   }
 }
 
