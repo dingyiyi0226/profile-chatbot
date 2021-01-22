@@ -47,13 +47,7 @@ function handleEvent(event) {
       }
 
     case 'follow':
-      return replyText(event.replyToken, 'Got followed event');
-
-    case 'unfollow':
-      return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
-
-    case 'join':
-      return replyText(event.replyToken, `Joined ${event.source.type}`);
+      return handleFollow(event.replyToken, event.source);
 
     case 'leave':
       return console.log(`Left: ${JSON.stringify(event)}`);
@@ -65,11 +59,70 @@ function handleEvent(event) {
       }
       return replyText(event.replyToken, `Got postback: ${data}`);
 
-    case 'beacon':
-      return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
-
     default:
       return console.log(`not handle event: ${JSON.stringify(event)}`);
+  }
+}
+
+function handleFollow(replyToken, source) {
+  console.log('follow: ', source)
+
+  if (source.userId) {
+    return client.getProfile(source.userId)
+      .then((profile) => client.replyMessage(
+        replyToken,
+        [
+          {
+            type: 'text',
+            text: `Hi ${profile.displayName} $`,
+            emojis: [
+              {
+                index: 4+profile.displayName.length,
+                productId: '5ac1bfd5040ab15980c9b435',
+                emojiId: '003'
+              },
+            ],
+          },
+          {
+            type: 'text',
+            text: 'Select anything to know more about me!',
+          },
+          {
+            type: 'text',
+            text: 'Enter `options` to show all supported options',
+            quickReply: {
+              items: [
+                {
+                  type: 'action',
+                  action: {
+                    type: 'message',
+                    label: 'Education',
+                    text: 'education'
+                  }
+                },
+                {
+                  type: 'action',
+                  action: {
+                    type: 'message',
+                    label: 'Skills',
+                    text: 'skills'
+                  }
+                },
+                {
+                  type: 'action',
+                  action: {
+                    type: 'message',
+                    label: 'Side projects',
+                    text: 'side projects'
+                  }
+                },
+              ]
+            },
+          },
+        ]
+      ));
+  } else {
+    return replyText(replyToken, 'Bot can\'t use profile API without user ID');
   }
 }
 
@@ -95,21 +148,6 @@ function handleText(message, replyToken, source) {
         }
       );
 
-    // case 'profile':
-    //   if (source.userId) {
-    //     return client.getProfile(source.userId)
-    //       .then((profile) => replyText(
-    //         replyToken,
-    //         [
-    //           `Display name: ${profile.displayName}`,
-    //           `Status message: ${profile.statusMessage}`,
-    //         ]
-    //       ));
-    //   } else {
-    //     return replyText(replyToken, 'Bot can\'t use profile API without user ID');
-    //   }
-
-
     case 'education':
       return client.replyMessage(
         replyToken,
@@ -128,6 +166,7 @@ function handleText(message, replyToken, source) {
           },
         ]
       );
+
     case 'skills':
       return client.replyMessage(
         replyToken,
@@ -146,6 +185,7 @@ function handleText(message, replyToken, source) {
           },
         ]
       );
+
     case 'side projects':
       return client.replyMessage(
         replyToken,
