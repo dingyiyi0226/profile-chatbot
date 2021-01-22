@@ -26,6 +26,8 @@ app.post('/webhook', (req, res) => {
     });
 });
 
+const supportedCommands = ['Education', 'Side projects', 'Skills', 'Interests']
+
 // simple reply function
 const replyText = (token, texts) => {
   texts = Array.isArray(texts) ? texts : [texts];
@@ -91,32 +93,15 @@ function handleFollow(replyToken, source) {
             type: 'text',
             text: 'Enter `options` to show all supported options',
             quickReply: {
-              items: [
-                {
+              items:
+                supportedCommands.map(cmd => ({
                   type: 'action',
                   action: {
                     type: 'message',
-                    label: 'Education',
-                    text: 'Education'
+                    label: cmd,
+                    text: cmd
                   }
-                },
-                {
-                  type: 'action',
-                  action: {
-                    type: 'message',
-                    label: 'Skills',
-                    text: 'Skills'
-                  }
-                },
-                {
-                  type: 'action',
-                  action: {
-                    type: 'message',
-                    label: 'Side projects',
-                    text: 'Side projects'
-                  }
-                },
-              ]
+                })),
             },
           },
         ]
@@ -130,24 +115,6 @@ function handleText(message, replyToken, source) {
 
   switch (message.text.trim().toLowerCase()) {
     case 'options':
-      return client.replyMessage(
-        replyToken,
-        {
-          type: 'template',
-          altText: 'Options alt text',
-          template: {
-            type: 'buttons',
-            title: 'Avalible options',
-            text: 'this is text',
-            actions: [
-              { label: 'Education', type: 'message', text: 'Education' },
-              { label: 'Side projects', type: 'message', text: 'Side projects' },
-              { label: 'Skills', type: 'message', text: 'Skills' },
-            ]
-          }
-        }
-      );
-    case 'option':
       return client.replyMessage(
         replyToken,
         {
@@ -169,40 +136,15 @@ function handleText(message, replyToken, source) {
             body: {
               type: 'box',
               layout: 'vertical',
-              contents: [
-                {
+              contents:
+                supportedCommands.map(cmd => ({
                   type: 'button',
                   action: {
                     type: 'message',
-                    label: 'Education',
-                    text: 'Education'
+                    label: cmd,
+                    text: cmd
                   }
-                },
-                {
-                  type: 'button',
-                  action: {
-                    type: 'message',
-                    label: 'Side projects',
-                    text: 'Side projects'
-                  }
-                },
-                {
-                  type: 'button',
-                  action: {
-                    type: 'message',
-                    label: 'Skills',
-                    text: 'Skills'
-                  }
-                },
-                {
-                  type: 'button',
-                  action: {
-                    type: 'message',
-                    label: 'Interests',
-                    text: 'Interests'
-                  }
-                },
-              ],
+                })),
               height: '150px',
               justifyContent: 'space-evenly',
             },
@@ -211,7 +153,6 @@ function handleText(message, replyToken, source) {
                 separator: true
               }
             }
-
           }
         }
       );
