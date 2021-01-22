@@ -73,113 +73,130 @@ function handleEvent(event) {
   }
 }
 
-// function handleText(message, replyToken, source) {
-
-// }
-
 function handleText(message, replyToken, source) {
-  const buttonsImageURL = `${baseURL}/static/1040.jpg`;
 
-  switch (message.text) {
-    case 'profile':
-      if (source.userId) {
-        return client.getProfile(source.userId)
-          .then((profile) => replyText(
-            replyToken,
-            [
-              `Display name: ${profile.displayName}`,
-              `Status message: ${profile.statusMessage}`,
-            ]
-          ));
-      } else {
-        return replyText(replyToken, 'Bot can\'t use profile API without user ID');
-      }
-    case 'buttons':
+  switch (message.text.trim().toLowerCase()) {
+    case 'options':
       return client.replyMessage(
         replyToken,
         {
           type: 'template',
-          altText: 'Buttons alt text',
+          altText: 'Options alt text',
           template: {
             type: 'buttons',
-            thumbnailImageUrl: buttonsImageURL,
-            title: 'My button sample',
-            text: 'Hello, my button',
+            title: 'Avalible options',
+            text: 'this is text',
             actions: [
-              { label: 'Go to line.me', type: 'uri', uri: 'https://line.me' },
-              { label: 'Say hello1', type: 'postback', data: 'hello こんにちは' },
-              { label: '言 hello2', type: 'postback', data: 'hello こんにちは', text: 'hello こんにちは' },
-              { label: 'Say message', type: 'message', text: 'Rice=米' },
-            ],
-          },
+              { label: 'Education', type: 'message', text: 'education' },
+              { label: 'Side projects', type: 'message', text: 'side projects' },
+              { label: 'Skills', type: 'message', text: 'skills' },
+            ]
+          }
         }
       );
-    case 'confirm':
+
+    // case 'profile':
+    //   if (source.userId) {
+    //     return client.getProfile(source.userId)
+    //       .then((profile) => replyText(
+    //         replyToken,
+    //         [
+    //           `Display name: ${profile.displayName}`,
+    //           `Status message: ${profile.statusMessage}`,
+    //         ]
+    //       ));
+    //   } else {
+    //     return replyText(replyToken, 'Bot can\'t use profile API without user ID');
+    //   }
+
+
+    case 'education':
       return client.replyMessage(
         replyToken,
-        {
-          type: 'template',
-          altText: 'Confirm alt text',
-          template: {
-            type: 'confirm',
-            text: 'Do it?',
-            actions: [
-              { label: 'Yes', type: 'message', text: 'Yes!' },
-              { label: 'No', type: 'message', text: 'No!' },
-            ],
+        [
+          {
+            type: 'text',
+            text: 'B.S. in Electrical Engineering, National Taiwan University (September 2017 - June 2021 (Expected))'
           },
-        }
-      )
-    case 'carousel':
+          {
+            type: 'text',
+            text: 'Undergraduate researcher in Wireless Mobile Network Laboratory, NTU (July 2020 - Present)'
+          },
+          {
+            type: 'text',
+            text: 'Undergraduate researcher in Advanced Antenna Laboratory, NTU (September 2019 - July 2020)'
+          },
+        ]
+      );
+    case 'skills':
+      return client.replyMessage(
+        replyToken,
+        [
+          {
+            type: 'text',
+            text: 'Python, C++'
+          },
+          {
+            type: 'text',
+            text: 'WebDev: JavaScript, html, css, ReactJS, nodeJS'
+          },
+          {
+            type: 'text',
+            text: 'Cloud Service: Google Cloud Platform'
+          },
+        ]
+      );
+    case 'side projects':
       return client.replyMessage(
         replyToken,
         {
           type: 'template',
-          altText: 'Carousel alt text',
+          altText: 'Side projects alt text',
           template: {
             type: 'carousel',
             columns: [
               {
-                thumbnailImageUrl: buttonsImageURL,
-                title: 'hoge',
-                text: 'fuga',
+                title: 'tripago',
+                text: 'An album platform to record and share your trips',
                 actions: [
-                  { label: 'Go to line.me', type: 'uri', uri: 'https://line.me' },
-                  { label: 'Say hello1', type: 'postback', data: 'hello こんにちは' },
+                  { label: 'Go to github repo', type: 'uri', uri: 'https://github.com/dingyiyi0226/tripago' },
                 ],
               },
               {
-                thumbnailImageUrl: buttonsImageURL,
-                title: 'hoge',
-                text: 'fuga',
+                title: 'police assistant',
+                text: 'A decentralized police assistant',
                 actions: [
-                  { label: '言 hello2', type: 'postback', data: 'hello こんにちは', text: 'hello こんにちは' },
-                  { label: 'Say message', type: 'message', text: 'Rice=米' },
+                  { label: 'Go to github repo', type: 'uri', uri: 'https://github.com/dingyiyi0226/police-assistant' },
+                ],
+              },
+              {
+                title: 'catcatcat',
+                text: 'An IoT cat feeder controlled by iOS app',
+                actions: [
+                  { label: 'Go to github repo', type: 'uri', uri: 'https://github.com/dingyiyi0226/catcatcat' },
                 ],
               },
             ],
           },
         }
       );
-    
 
-    
     default:
-      console.log(`Echo message to ${replyToken}: ${message.text}`);
-      return replyText(replyToken, message.text);
+      console.log(`Receive message: ${message.text}`);
+      return;
   }
 }
 
 const port = process.env.PORT || 4000
 app.listen(port, () => {
-  if (baseURL) {
-    console.log(`listening on ${baseURL}:${port}/webhook`);
-  } else {
-    console.log("It seems that BASE_URL is not set. Connecting to ngrok...")
-    ngrok.connect(port).then(url => {
-      baseURL = url;
-      console.log(`listening on ${baseURL}/webhook`);
-    }).catch(console.error);
-  }
+  // if (baseURL) {
+  //   console.log(`listening on ${baseURL}:${port}/webhook`);
+  // } else {
+  //   console.log("It seems that BASE_URL is not set. Connecting to ngrok...")
+  //   ngrok.connect(port).then(url => {
+  //     baseURL = url;
+  //     console.log(`listening on ${baseURL}/webhook`);
+  //   }).catch(console.error);
+  // }
   console.log(`Server is up on port ${port}.`)
 });
