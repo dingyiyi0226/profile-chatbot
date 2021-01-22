@@ -97,7 +97,7 @@ function handleFollow(replyToken, source) {
                   action: {
                     type: 'message',
                     label: 'Education',
-                    text: 'education'
+                    text: 'Education'
                   }
                 },
                 {
@@ -105,7 +105,7 @@ function handleFollow(replyToken, source) {
                   action: {
                     type: 'message',
                     label: 'Skills',
-                    text: 'skills'
+                    text: 'Skills'
                   }
                 },
                 {
@@ -113,7 +113,7 @@ function handleFollow(replyToken, source) {
                   action: {
                     type: 'message',
                     label: 'Side projects',
-                    text: 'side projects'
+                    text: 'Side projects'
                   }
                 },
               ]
@@ -140,10 +140,78 @@ function handleText(message, replyToken, source) {
             title: 'Avalible options',
             text: 'this is text',
             actions: [
-              { label: 'Education', type: 'message', text: 'education' },
-              { label: 'Side projects', type: 'message', text: 'side projects' },
-              { label: 'Skills', type: 'message', text: 'skills' },
+              { label: 'Education', type: 'message', text: 'Education' },
+              { label: 'Side projects', type: 'message', text: 'Side projects' },
+              { label: 'Skills', type: 'message', text: 'Skills' },
             ]
+          }
+        }
+      );
+    case 'option':
+      return client.replyMessage(
+        replyToken,
+        {
+          type: 'flex',
+          altText: 'supported options',
+          contents: {
+            type: 'bubble',
+            header: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'text',
+                  text: 'Supported Options',
+                  weight: 'bold'
+                }
+              ]
+            },
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'button',
+                  action: {
+                    type: 'message',
+                    label: 'Education',
+                    text: 'Education'
+                  }
+                },
+                {
+                  type: 'button',
+                  action: {
+                    type: 'message',
+                    label: 'Side projects',
+                    text: 'Side projects'
+                  }
+                },
+                {
+                  type: 'button',
+                  action: {
+                    type: 'message',
+                    label: 'Skills',
+                    text: 'Skills'
+                  }
+                },
+                {
+                  type: 'button',
+                  action: {
+                    type: 'message',
+                    label: 'Interests',
+                    text: 'Interests'
+                  }
+                },
+              ],
+              height: '150px',
+              justifyContent: 'space-evenly',
+            },
+            styles: {
+              body: {
+                separator: true
+              }
+            }
+
           }
         }
       );
@@ -191,7 +259,7 @@ function handleText(message, replyToken, source) {
         replyToken,
         {
           type: 'template',
-          altText: 'Side projects alt text',
+          altText: 'three side projects',
           template: {
             type: 'carousel',
             columns: [
@@ -220,6 +288,15 @@ function handleText(message, replyToken, source) {
           },
         }
       );
+
+      case 'interests':
+        return client.replyMessage(
+          replyToken,
+          {
+            type: 'text',
+            text: 'Table tennis, badminton'
+          }
+        )
 
     default:
       console.log(`Receive message: ${message.text}`);
