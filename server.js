@@ -12,9 +12,10 @@ const client = new line.Client(config);
 
 const app = express();
 app.use(cors());
-app.use('/webhook', line.middleware(config))
+app.use('/webhook', line.middleware(config));
 app.use(express.json());
 
+app.use('/static', express.static('static'));
 
 app.post('/webhook', (req, res) => {
   Promise
@@ -26,7 +27,7 @@ app.post('/webhook', (req, res) => {
     });
 });
 
-const supportedCommands = ['Education', 'Side projects', 'Skills', 'Interests']
+const supportedCommands = ['Education', 'Projects', 'Skills', 'Interests']
 
 function handleEvent(event) {
   switch (event.type) {
@@ -51,7 +52,7 @@ function handleEvent(event) {
 }
 
 function handleFollow(replyToken, source) {
-  console.log('follow: ', source)
+  console.log('follow: ', source);
 
   if (source.userId) {
     return client.getProfile(source.userId)
@@ -80,6 +81,7 @@ function handleFollow(replyToken, source) {
               items:
                 supportedCommands.map(cmd => ({
                   type: 'action',
+                  imageUrl: `${baseURL}/static/${cmd.toLowerCase()}.png`,
                   action: {
                     type: 'message',
                     label: cmd,
@@ -179,7 +181,7 @@ function handleText(message, replyToken, source) {
         ]
       );
 
-    case 'side projects':
+    case 'projects':
       return client.replyMessage(
         replyToken,
         {
@@ -187,26 +189,30 @@ function handleText(message, replyToken, source) {
           altText: 'three side projects',
           template: {
             type: 'carousel',
+            imageSize: 'contain',
             columns: [
               {
-                title: 'tripago',
+                title: 'Tripago',
                 text: 'An album platform to record and share your trips',
+                thumbnailImageUrl: `${baseURL}/static/tripago.png`,
                 actions: [
                   { label: 'Go to github repo', type: 'uri', uri: 'https://github.com/dingyiyi0226/tripago' },
                 ],
               },
               {
-                title: 'police assistant',
+                title: 'Police assistant',
                 text: 'A decentralized police assistant',
+                thumbnailImageUrl: `${baseURL}/static/police-assistant.png`,
                 actions: [
                   { label: 'Go to github repo', type: 'uri', uri: 'https://github.com/dingyiyi0226/police-assistant' },
                 ],
               },
               {
-                title: 'catcatcat',
-                text: 'An IoT cat feeder controlled by iOS app',
+                title: 'Trojan Radar System',
+                text: 'A wearable dualband radar system',
+                thumbnailImageUrl: `${baseURL}/static/radar.png`,
                 actions: [
-                  { label: 'Go to github repo', type: 'uri', uri: 'https://github.com/dingyiyi0226/catcatcat' },
+                  { label: 'Go to github repo', type: 'uri', uri: 'https://github.com/dingyiyi0226/Wearable-Trojan-Radar-System' },
                 ],
               },
             ],
