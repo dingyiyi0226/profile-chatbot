@@ -11,4 +11,4 @@ Deploy on Google App Engine
 - `interests`: my interests
 
 ## Screenshots
-![screenshots](./img/all.png)
+![screenshots](./img/all.jpg)
