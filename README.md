@@ -12,3 +12,6 @@ Deploy on Google App Engine
 
 ## Screenshots
 ![screenshots](./img/all.jpg)
+
+## Development
+Have to uncomment ngrok stuff (line 4, line 239-247) in `server.js` to run on local server, and need to update Webhook URL in line developer console.
